@@ -3,7 +3,13 @@
  */
 package jdbc.mysql;
 
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+
 import org.flywaydb.core.Flyway;
+
+import jdbc.mysql.persistence.EmployeeDAO;
+import jdbc.mysql.persistence.entity.EmployeeEntity;
 
 public class Main {
     public static void main(String[] args) {
@@ -11,5 +17,13 @@ public class Main {
             .dataSource("jdbc:mysql://localhost/jdbc-sample", "root", "root")
             .load();
         flyway.migrate();
+
+        EmployeeEntity employee = new EmployeeEntity();
+        employee.setName("Mario");
+        employee.setSalary(new BigDecimal(5700));
+        employee.setBirthday(OffsetDateTime.now().minusYears(45));
+        System.out.println(employee);
+        EmployeeDAO.insert(employee);
+        System.out.println(employee);
     }
 }
