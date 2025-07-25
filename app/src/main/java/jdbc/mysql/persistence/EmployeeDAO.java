@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.OffsetDateTime;
-import static java.time.ZoneOffset.UTC; 
+import static java.time.ZoneOffset.UTC;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,13 +49,13 @@ public class EmployeeDAO {
         String sql = "SELECT * FROM employees ORDER BY name ASC";
 
         try (
-            var connection = ConnectionUtil.getConnection();
-            Statement statement = connection.createStatement()) {
-            
+                var connection = ConnectionUtil.getConnection();
+                Statement statement = connection.createStatement()) {
+
             statement.executeQuery(sql);
             ResultSet resultSet = statement.getResultSet();
 
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 EmployeeEntity employee = new EmployeeEntity();
                 employee.setId(resultSet.getLong("id"));
                 employee.setName(resultSet.getString("name"));
@@ -64,15 +64,39 @@ public class EmployeeDAO {
                 employee.setBirthday(OffsetDateTime.ofInstant(birthdayInstant, UTC));
                 allEmployees.add(employee);
             }
-            
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return allEmployees;
     }
 
-    public EmployeeEntity findById() {
-        return null;
-    }
+    public static EmployeeEntity findById(final long id) {
 
+        if (id <= 0) throw new IllegalArgumentException("ID deve ser positivo: " + id);
+        
+        EmployeeEntity employee = new EmployeeEntity();
+        String sql = "SELECT * FROM employees WHERE id = ?";
+
+        try (
+                var connection = ConnectionUtil.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setLong(1, id);
+            statement.executeQuery();
+            ResultSet resultSet = statement.getResultSet();
+
+            if (resultSet.next()) {
+                employee.setId(resultSet.getLong("id"));
+                employee.setName(resultSet.getString("name"));
+                employee.setSalary(resultSet.getBigDecimal("salary"));
+                var birthdayInstant = resultSet.getTimestamp("birthday").toInstant();
+                employee.setBirthday(OffsetDateTime.ofInstant(birthdayInstant, UTC));
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return employee;
+    }
 }
