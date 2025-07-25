@@ -1,8 +1,4 @@
-# Ignore Gradle project-specific cache directory
-.gradle
-
-# Ignore Gradle build output directory
-build# Created by https://www.toptal.com/developers/gitignore/api/gradle,java
+# Created by https://www.toptal.com/developers/gitignore/api/gradle,java
 # Edit at https://www.toptal.com/developers/gitignore?templates=gradle,java
 
 ### Java ###
