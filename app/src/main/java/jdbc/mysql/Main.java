@@ -19,8 +19,29 @@ public class Main {
             .load();
         flyway.migrate();
         ;
+        // CREATE / INSERT
+        /* EmployeeEntity employee = new EmployeeEntity();
+        employee.setName("Any name");
+        employee.setSalary(new BigDecimal(0));
+        employee.setBirthday(OffsetDateTime.now().minusYears(0));
+        EmployeeDAO.insert(employee); */
 
-        EmployeeEntity employee = EmployeeDAO.findById(3);
-        EmployeeDAO.delete(employee);
+        // UPDATE
+        /* EmployeeEntity employee = new EmployeeEntity();
+        employee.setId(0);
+        employee.setName("Any Name");
+        employee.setSalary(new BigDecimal(0));
+        employee.setBirthday(OffsetDateTime.now().minusYears(0));
+        EmployeeDAO.insert(employee); */
+
+        // DELETE
+        /* EmployeeEntity employee = EmployeeDAO.findById(3);
+        EmployeeDAO.delete(employee); */
+
+        // FindAll()
+        // EmployeeDAO.findAll();
+
+        // FindById
+        // EmployeeDAO.findById(0);
     }
 }
