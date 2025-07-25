@@ -5,6 +5,7 @@ package jdbc.mysql;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 import org.flywaydb.core.Flyway;
 
@@ -17,13 +18,9 @@ public class Main {
             .dataSource("jdbc:mysql://localhost/jdbc-sample", "root", "root")
             .load();
         flyway.migrate();
+        ;
 
-        EmployeeEntity employee = new EmployeeEntity();
-        employee.setName("Mario");
-        employee.setSalary(new BigDecimal(5700));
-        employee.setBirthday(OffsetDateTime.now().minusYears(45));
-        System.out.println(employee);
-        EmployeeDAO.insert(employee);
-        System.out.println(employee);
+        EmployeeEntity employee = EmployeeDAO.findById(3);
+        EmployeeDAO.delete(employee);
     }
 }

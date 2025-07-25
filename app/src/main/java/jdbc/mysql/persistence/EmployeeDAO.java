@@ -56,8 +56,20 @@ public class EmployeeDAO {
         }
     }
 
-    public static void delete() {
-        
+    public static void delete(final EmployeeEntity employee) {
+        String sql = "DELETE FROM employees WHERE id = ?";
+        try (   
+            var connection = ConnectionUtil.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setLong(1, employee.getId());
+            int affectedRows =statement.executeUpdate();
+
+            System.out.printf("Affected %d rows%n", affectedRows);
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }         
     }
 
     public static List<EmployeeEntity> findAll() {
