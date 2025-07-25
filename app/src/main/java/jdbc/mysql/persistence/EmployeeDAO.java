@@ -12,23 +12,23 @@ import java.util.List;
 import jdbc.mysql.persistence.entity.EmployeeEntity;
 
 public class EmployeeDAO {
-    public static void insert(final EmployeeEntity entity) {
+    public static void insert(final EmployeeEntity employee) {
 
         String sql = "INSERT INTO employees (name, salary, birthday) values ( ?, ?, ?)";
         try (
                 var connection = ConnectionUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            statement.setString(1, entity.getName());
-            statement.setBigDecimal(2, entity.getSalary());
-            statement.setObject(3, entity.getBirthday());
+            statement.setString(1, employee.getName());
+            statement.setBigDecimal(2, employee.getSalary());
+            statement.setObject(3, employee.getBirthday());
 
             int affectedRows = statement.executeUpdate();
             System.out.printf("Affected %d rows%n", affectedRows);
 
             try (var generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next())
-                    entity.setId(generatedKeys.getLong(1));
+                    employee.setId(generatedKeys.getLong(1));
             }
 
         } catch (SQLException ex) {
@@ -36,12 +36,28 @@ public class EmployeeDAO {
         }
     }
 
-    public void update() {
+    public static void update(final EmployeeEntity employee) {
 
+        String sql = "UPDATE employees SET name = ?, salary = ?, birthday = ? WHERE id = ? ";
+        try (
+                var connection = ConnectionUtil.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, employee.getName());
+            statement.setBigDecimal(2, employee.getSalary());
+            statement.setObject(3, employee.getBirthday());
+            statement.setLong(4, employee.getId());
+
+            int affectedRows = statement.executeUpdate();
+            System.out.printf("Affected %d rows%n", affectedRows);
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
-    public void delete() {
-
+    public static void delete() {
+        
     }
 
     public static List<EmployeeEntity> findAll() {
