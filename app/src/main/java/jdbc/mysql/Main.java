@@ -3,8 +3,13 @@
  */
 package jdbc.mysql;
 
+import org.flywaydb.core.Flyway;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello World");
+        var flyway = Flyway.configure()
+            .dataSource("jdbc:mysql://localhost/jdbc-sample", "root", "root")
+            .load();
+        flyway.migrate();
     }
 }
